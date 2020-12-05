@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS latvanyossagok(
     nev VARCHAR(1000) UNIQUE NOT NULL,
     leiras VARCHAR(1000) NOT NULL,
     ar INTEGER  DEFAULT 0  NOT NULL,
-    varos_id INTEGER,
+    varos_id INTEGER NOT NULL,
     FOREIGN KEY (varos_id)
     REFERENCES varosok (id)
 )
@@ -136,13 +136,15 @@ WHERE nev LIKE @nev
                 if (!(nev >= 1))
                 {
                     string sql2 = @"
-INSERT INTO `varosok`(`nev`, `lakossag`)
-VALUES (@nev, @lakosag)
+INSERT INTO `varosok`(`nev`, `leiras`, `ar`, `varos_id`)
+VALUES (@nev, @leiras, @ar, @varos_id)
 ";
                     var comm2 = this.conn.CreateCommand();
                     comm2.CommandText = sql2;
-                    comm2.Parameters.AddWithValue("@nev", tBVarosNev.Text);
-                    comm2.Parameters.AddWithValue("@lakosag", nUADVarosLakosaga.Value);
+                    comm2.Parameters.AddWithValue("@nev", tBLatvanyosagNev.Text);
+                    comm2.Parameters.AddWithValue("@leiras", tBLatvanyosagLeiras.Text);
+                    comm2.Parameters.AddWithValue("@ar", nUDLatvanyosagAr.Value);
+                    comm2.Parameters.AddWithValue("@varos_id", cBVaroshozKotes.SelectedIndex);
                     comm2.ExecuteNonQuery();
                 }
                 else
